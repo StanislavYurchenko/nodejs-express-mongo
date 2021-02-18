@@ -15,7 +15,13 @@ const validateNewUser = (req, res, next) => {
   const validationResult = schema.validate(body)
 
   if (validationResult.error) {
-    return res.status(404).json(validationResult.error)
+    return res
+      .status(404)
+      .json({
+        status: 'error',
+        code: 404,
+        data: { error: validationResult.error }
+      })
   }
 
   next()
@@ -31,7 +37,13 @@ const validateUpdateUser = (req, res, next) => {
   const validationResult = schema.validate(body)
 
   if (validationResult.error) {
-    return res.status(404).json(validationResult.error)
+    return res
+      .status(404)
+      .json({
+        status: 'error',
+        code: 404,
+        data: { error: validationResult.error }
+      })
   }
 
   next()
@@ -53,32 +65,64 @@ const validateId = async (req, res, next) => {
 
 router.get('/', async (_req, res) => {
   const contacts = await contactsModel.listContacts()
-  res.json(contacts)
+  return res
+    .status(200)
+    .json({
+      status: 'success',
+      code: 200,
+      data: { contacts: contacts }
+    })
 })
 
 router.get('/:contactId', validateId, async (req, res) => {
   const { contactId } = req.params
   const contact = await contactsModel.getContactById(contactId)
-  res.json(contact)
+  return res
+    .status(200)
+    .json({
+      status: 'success',
+      code: 200,
+      data: { contact: contact }
+    })
 })
 
 router.post('/', validateNewUser, async (req, res) => {
   const { body } = req
   const contact = await contactsModel.addContact(body)
-  res.json(contact)
+  return res
+    .status(201)
+    .json({
+      status: 'success',
+      code: 201,
+      data: { contact: contact }
+    })
 })
 
 router.delete('/:contactId', validateId, async (req, res) => {
   const { contactId } = req.params
   const contact = await contactsModel.removeContact(contactId)
-  res.json(contact)
+
+  return res
+    .status(200)
+    .json({
+      status: 'success',
+      code: 200,
+      data: { contact: contact }
+    })
 })
 
 router.patch('/:contactId', validateId, validateUpdateUser, async (req, res) => {
   const { contactId } = req.params
   const { body } = req
   const contact = await contactsModel.updateContact(contactId, body)
-  res.json(contact)
+
+  return res
+    .status(200)
+    .json({
+      status: 'success',
+      code: 200,
+      data: { contact: contact }
+    })
 })
 
 module.exports = router

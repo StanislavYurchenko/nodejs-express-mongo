@@ -1,6 +1,7 @@
 const express = require('express')
 const Joi = require('joi')
 const contactsModel = require('../../model/index')
+const notFoundError = require('../../errors/notFoundError')
 
 const router = express.Router()
 
@@ -39,7 +40,14 @@ const validateUpdateUser = (req, res, next) => {
 const validateId = async (req, res, next) => {
   const { contactId } = req.params
   const contact = await contactsModel.getContactById(contactId)
-  if (!contact) return res.status(404).json({ message: 'User is not found' })
+  if (!contact) {
+    try {
+      notFoundError()
+    } catch (error) {
+      next(error)
+    }
+  }
+
   next()
 }
 

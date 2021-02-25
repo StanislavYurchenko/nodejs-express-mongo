@@ -2,7 +2,11 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
+const dbConnect = require('./db/mongoDb')
 const contactsRouter = require('./routes/api/contacts')
+
+const dbInit = async () => await dbConnect()
+dbInit()
 
 const app = express()
 

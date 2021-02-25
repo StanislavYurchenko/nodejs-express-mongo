@@ -1,26 +1,28 @@
 const express = require('express')
 const Joi = require('joi')
-const contactsModel = require('../../model/index')
-const notFoundError = require('../../errors/notFoundError')
+const contactsModel = require('../../model/contacts')
 
 const router = express.Router()
 
 const validateNewUser = (req, res, next) => {
   const { body } = req
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(10).required(),
+    name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().min(7).max(9).required()
+    phone: Joi.string().required(),
+    subscription: Joi.string().required(),
+    password: Joi.string().required(),
+    token: Joi.string().empty('').default(''),
   })
   const validationResult = schema.validate(body)
 
   if (validationResult.error) {
     return res
-      .status(404)
+      .status(400)
       .json({
         status: 'error',
-        code: 404,
-        data: { error: validationResult.error }
+        code: 400,
+        data: validationResult.error
       })
   }
 
@@ -30,99 +32,71 @@ const validateNewUser = (req, res, next) => {
 const validateUpdateUser = (req, res, next) => {
   const { body } = req
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(10),
+    name: Joi.string(),
     email: Joi.string().email(),
-    phone: Joi.string().min(7).max(9)
+    phone: Joi.string(),
+    subscription: Joi.string(),
+    password: Joi.string(),
+    token: Joi.string().empty(''),
   })
   const validationResult = schema.validate(body)
 
   if (validationResult.error) {
     return res
-      .status(404)
+      .status(400)
       .json({
         status: 'error',
-        code: 404,
-        data: { error: validationResult.error }
+        code: 400,
+        data: validationResult.error
       })
   }
 
   next()
 }
 
-const validateId = async (req, res, next) => {
-  const { contactId } = req.params
-  const contact = await contactsModel.getContactById(contactId)
-  if (!contact) {
-    try {
-      notFoundError()
-    } catch (error) {
-      next(error)
-    }
-  }
+const createResponse = (res, data, error) => {
+  // eslint-disable-next-line no-mixed-operators
+  const code = error && error.code || !data && 404 || data && 200
+  const status = data ? 'success' : 'invalid'
 
-  next()
+  return res
+    .status(code)
+    .json({ status, code, data: (data || error) })
 }
 
 router.get('/', async (_req, res) => {
-  const contacts = await contactsModel.listContacts()
-  return res
-    .status(200)
-    .json({
-      status: 'success',
-      code: 200,
-      data: { contacts: contacts }
-    })
+  const { data, error } = await contactsModel.listContacts()
+
+  createResponse(res, data, error)
 })
 
-router.get('/:contactId', validateId, async (req, res) => {
+router.get('/:contactId', async (req, res) => {
   const { contactId } = req.params
-  const contact = await contactsModel.getContactById(contactId)
-  return res
-    .status(200)
-    .json({
-      status: 'success',
-      code: 200,
-      data: { contact: contact }
-    })
+  const { data, error } = await contactsModel.getContactById(contactId)
+
+  createResponse(res, data, error)
 })
 
 router.post('/', validateNewUser, async (req, res) => {
   const { body } = req
-  const contact = await contactsModel.addContact(body)
-  return res
-    .status(201)
-    .json({
-      status: 'success',
-      code: 201,
-      data: { contact: contact }
-    })
+  const { data, error } = await contactsModel.addContact(body)
+
+  createResponse(res, data, error)
 })
 
-router.delete('/:contactId', validateId, async (req, res) => {
+router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params
-  const contact = await contactsModel.removeContact(contactId)
+  const { data, error } = await contactsModel.removeContact(contactId)
 
-  return res
-    .status(200)
-    .json({
-      status: 'success',
-      code: 200,
-      data: { contact: contact }
-    })
+  createResponse(res, data, error)
 })
 
-router.patch('/:contactId', validateId, validateUpdateUser, async (req, res) => {
+router.patch('/:contactId', validateUpdateUser, async (req, res) => {
   const { contactId } = req.params
   const { body } = req
-  const contact = await contactsModel.updateContact(contactId, body)
+  const { data, error } = await contactsModel.updateContact(contactId, body)
 
-  return res
-    .status(200)
-    .json({
-      status: 'success',
-      code: 200,
-      data: { contact: contact }
-    })
+  createResponse(res, data, error)
 })
 
 module.exports = router

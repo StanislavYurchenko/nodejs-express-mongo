@@ -13,10 +13,18 @@ const dbConnect = async () => {
   try {
     mongoose.connect(uri, options)
     const db = mongoose.connection
-    db.once('open', () => console.log('<<< Connected to mongoDB >>>'))
+    db.on('connected', () => console.log('<<< Connected to mongoDB >>>'))
+    db.on('disconnected', () => console.log('<<< Disconnected from mongoDB >>>'))
     db.on('error', console.error.bind(console, 'connection error:'))
-  } catch (error) {
 
+    process.on('SIGINT', async () => {
+      db.close(() => {
+        console.log('Connection om MondoDb closed and app termination')
+        process.exit(1)
+      })
+    })
+  } catch (error) {
+    console.log(error)
   }
 }
 

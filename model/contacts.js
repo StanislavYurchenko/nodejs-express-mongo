@@ -22,7 +22,7 @@ const contactSchema = new Schema({
     type: String,
     required: true,
   },
-})
+}, { versionKey: false, timestamps: true })
 
 const Contact = mongoose.model('Contact', contactSchema)
 
@@ -35,15 +35,7 @@ const listContacts = async () => {
 }
 
 const getContactById = async (contactId) => {
-  const isIdValid = mongoose.Types.ObjectId.isValid(contactId)
-
   try {
-    if (!isIdValid) {
-      const error = new Error()
-      error.message = 'Id is invalid'
-      error.code = 400
-      throw error
-    }
     return { data: await Contact.findById(contactId) }
   } catch (error) {
     return { error }
@@ -67,14 +59,7 @@ const removeContact = async (contactId) => {
 }
 
 const updateContact = async (contactId, body) => {
-  const isIdValid = mongoose.Types.ObjectId.isValid(contactId)
   try {
-    if (!isIdValid) {
-      const error = new Error()
-      error.message = 'Id is invalid'
-      error.code = 400
-      throw error
-    }
     return { data: await Contact.findByIdAndUpdate(contactId, body, { new: true }) }
   } catch (error) {
     return { error }

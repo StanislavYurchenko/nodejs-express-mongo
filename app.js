@@ -2,7 +2,11 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contacts')
+const dbConnect = require('./db/mongoDb')
+const contactsRouter = require('./routes/api/contacts.router')
+
+const dbInit = async () => await dbConnect()
+dbInit()
 
 const app = express()
 
@@ -19,12 +23,12 @@ app.use((req, res) => {
 })
 
 app.use((err, _req, res, next) => {
-  if (err.status === 404) {
+  if (err.code === 404 || err.code === 400) {
     return res
-      .status(404)
+      .status(err.code)
       .json({
         status: 'error',
-        code: 404,
+        code: err.code,
         data: {
           error: err
         }
@@ -35,7 +39,15 @@ app.use((err, _req, res, next) => {
 })
 
 app.use((err, _req, res, _next) => {
-  return res.status(500).json({ message: err.message })
+  return res
+    .status(500)
+    .json({
+      status: 'error',
+      code: err.code || err.status,
+      data: {
+        error: err
+      }
+    })
 })
 
 module.exports = app

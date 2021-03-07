@@ -1,48 +1,43 @@
 const contactsModel = require('../model/contacts')
+const { createResponse } = require('../utils/createResponse')
 
-const createResponse = (res, data, error) => {
-  // eslint-disable-next-line no-mixed-operators
-  const code = error && error.code || !data && 404 || data && 200
-  const status = data ? 'success' : 'invalid'
-
-  return res
-    .status(code)
-    .json({ status, code, data: (data || error) })
-}
-
-const getContacts = async (_req, res) => {
-  const { data, error } = await contactsModel.listContacts()
-
-  createResponse(res, data, error)
+const getContacts = async (req, res) => {
+  const userId = req.user._id
+  const { data, error } = await contactsModel.listContacts(userId)
+  return createResponse(res, data, error)
 }
 
 const getContactById = async (req, res) => {
-  const { contactId } = req.params
-  const { data, error } = await contactsModel.getContactById(contactId)
+  const userId = req.user._id
+  const { id } = req.params
+  const { data, error } = await contactsModel.getContactById(id, userId)
 
-  createResponse(res, data, error)
+  return createResponse(res, data, error)
 }
 
 const addContact = async (req, res) => {
+  const userId = req.user._id
   const { body } = req
-  const { data, error } = await contactsModel.addContact(body)
+  const { data, error } = await contactsModel.addContact(body, userId)
 
-  createResponse(res, data, error)
+  return createResponse(res, data, error)
 }
 
 const removeContactById = async (req, res) => {
-  const { contactId } = req.params
-  const { data, error } = await contactsModel.removeContact(contactId)
+  const userId = req.user._id
+  const { id } = req.params
+  const { data, error } = await contactsModel.removeContact(id, userId)
 
-  createResponse(res, data, error)
+  return createResponse(res, data, error)
 }
 
 const updateContactById = async (req, res) => {
-  const { contactId } = req.params
+  const userId = req.user._id
+  const { id } = req.params
   const { body } = req
-  const { data, error } = await contactsModel.updateContact(contactId, body)
+  const { data, error } = await contactsModel.updateContact(id, body, userId)
 
-  createResponse(res, data, error)
+  return createResponse(res, data, error)
 }
 
 module.exports = {

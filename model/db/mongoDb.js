@@ -7,6 +7,8 @@ const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   promiseLibrary: global.Promise,
+  useCreateIndex: true,
+  useFindAndModify: false,
 }
 
 const dbConnect = async () => {

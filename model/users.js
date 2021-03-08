@@ -12,7 +12,7 @@ const findUserByEmail = async (email) => {
 
 const findUserById = async (id) => {
   try {
-    return { data: await User.findOne({ _id: id }) }
+    return { data: await User.findById(id) }
   } catch (error) {
     return { error }
   }
@@ -20,7 +20,7 @@ const findUserById = async (id) => {
 
 const updateToken = async (_id, token) => {
   try {
-    return { data: await User.updateOne({ _id }, { token }) }
+    return { data: await User.findByIdAndUpdate(_id, { token }) }
   } catch (error) {
     return { error }
   }
@@ -49,9 +49,11 @@ const login = async (body) => {
   const { email, password } = body
   try {
     const { data } = await findUserByEmail(email)
-    if (!data || !await data.validPassword(password)) {
+    const isValidPassword = data ? await data.validPassword(password) : false
+
+    if (!data || !isValidPassword) {
       const error = new Error()
-      error.code = HTTP_CODE.UNAUTHORIZED
+      error.code = HTTP_CODE.NOT_FOUND
       error.message = 'User or password is incorrect'
       throw error
     }
@@ -63,9 +65,17 @@ const login = async (body) => {
 
 const logout = async (id) => {
   try {
-    const UserForRemove = User.findById(id)
+    const user = User.findById(id)
     await User.updateToken(id, null)
-    return { data: UserForRemove }
+    return { data: user }
+  } catch (error) {
+    return { error }
+  }
+}
+
+const updateUserById = async (id, body) => {
+  try {
+    return { data: User.findByIdAndUpdate(id, body) }
   } catch (error) {
     return { error }
   }
@@ -78,4 +88,5 @@ module.exports = {
   logout,
   updateToken,
   findUserById,
+  updateUserById,
 }

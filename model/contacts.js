@@ -1,14 +1,31 @@
-
 const Contact = require('./schemas/Contact')
+const { SUBSCRIPTIONS_TYPE } = require('../utils/constants')
 
-const listContacts = async (userId) => {
+const listContacts = async (userId, query) => {
+  const { sortBy, sortByDesc, sub, select, limit = 5, page = 1 } = query
   try {
-    return {
-      data: await Contact.find({ owner: userId }).populate({
-        path: 'owner',
-        select: 'email -_id',
-      })
-    }
+    const { docs: contacts, totalDocs: total } =
+      await Contact
+        .paginate(
+          {
+            owner: userId,
+            subscription: sub || [...Object.values(SUBSCRIPTIONS_TYPE)],
+          },
+          {
+            limit,
+            page,
+            sort: {
+              ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+              ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+            },
+            select: select ? select.split('|').join(' ') : '',
+            populate: {
+              path: 'owner',
+              select: 'email -_id',
+            }
+          })
+
+    return { data: { contacts, total, limit, page } }
   } catch (error) {
     return { error }
   }

@@ -18,9 +18,9 @@ const findUserById = async (id) => {
   }
 }
 
-const updateToken = async (_id, token) => {
+const updateToken = async (id, token) => {
   try {
-    return { data: await User.findByIdAndUpdate(_id, { token }) }
+    return { data: await User.findByIdAndUpdate(id, { token }) }
   } catch (error) {
     return { error }
   }
@@ -65,8 +65,8 @@ const login = async (body) => {
 
 const logout = async (id) => {
   try {
-    const user = User.findById(id)
-    await User.updateToken(id, null)
+    const user = await User.findById(id)
+    await updateToken(id, null)
     return { data: user }
   } catch (error) {
     return { error }
@@ -75,7 +75,7 @@ const logout = async (id) => {
 
 const updateUserById = async (id, body) => {
   try {
-    return { data: User.findByIdAndUpdate(id, body) }
+    return { data: User.findByIdAndUpdate(id, body, { new: true }) }
   } catch (error) {
     return { error }
   }

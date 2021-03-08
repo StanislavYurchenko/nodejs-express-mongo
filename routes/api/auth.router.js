@@ -5,10 +5,10 @@ const guard = require('../../utils/guard')
 
 const router = express.Router()
 
-router.post('/register', validate.auth, controller.register)
+router.post('/register', validate.auth, validate.newUser, controller.register)
 
 router.post('/login', validate.auth, controller.login)
 
-router.post('/logout', guard, validate.newUser, controller.logout)
+router.post('/logout', guard, controller.logout)
 
 module.exports = router

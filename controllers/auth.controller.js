@@ -21,18 +21,18 @@ const register = async (req, res) => {
   const payload = { _id: user._id }
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '240h' })
 
-  await usersModel.updateToken(user._id, token)
+  const { data } = await usersModel.updateToken(user._id, token)
 
-  const newUser = user
+  const newUser = data
     ? {
-        _id: user._id,
-        email: user.email,
-        subscription: user.subscription,
+        _id: data._id,
+        email: data.email,
+        subscription: data.subscription,
         token
       }
     : undefined
 
-  return createResponse(res, newUser, _, code)
+  return createResponse(res, newUser, errorReg, code)
 }
 
 const login = async (req, res) => {
@@ -64,6 +64,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   const userId = req.user.id
   const { data, error } = await usersModel.logout(userId)
+
   const user = data
     ? {
         _id: data._id,

@@ -18,6 +18,7 @@ passport.use(new Strategy(params, async (payload, done) => {
   try {
     const id = payload._id
     const { data } = await userModel.findUserById(id)
+
     if (!data) {
       const error = new Error()
       error.message = 'User not found'

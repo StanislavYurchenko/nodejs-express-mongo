@@ -9,6 +9,8 @@ const options = {
   promiseLibrary: global.Promise,
   useCreateIndex: true,
   useFindAndModify: false,
+  returnOriginal: false,
+
 }
 
 const dbConnect = async () => {

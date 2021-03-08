@@ -124,7 +124,7 @@ const newUser = (req, _res, next) => {
   const { body } = req
   const schema = Joi.object({
     email: Joi.string().email().required(),
-    subscription: Joi.string().required(),
+    subscription: Joi.string().valid(...Object.values(SUBSCRIPTIONS_TYPE)).default(SUBSCRIPTIONS_TYPE.free),
     password: Joi.string().required(),
     token: Joi.string().empty('').default(''),
   })

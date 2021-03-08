@@ -19,7 +19,7 @@ const apiLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 3,
+  max: 10,
   handler: (_req, _res, next) => {
     try {
       const error = new Error()

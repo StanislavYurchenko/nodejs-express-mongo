@@ -8,7 +8,7 @@ const newContact = (req, _res, next) => {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
-    subscription: Joi.string().required(),
+    subscription: Joi.string().valid(...Object.values(SUBSCRIPTIONS_TYPE)).default(SUBSCRIPTIONS_TYPE.free),
     password: Joi.string().required(),
     owner: Joi.string().empty('').default(''),
   })

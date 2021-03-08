@@ -20,7 +20,6 @@ const addContact = async (req, res) => {
   const userId = req.user._id
   const { body } = req
   const { data, error } = await contactsModel.addContact(body, userId)
-
   return createResponse(res, data, error)
 }
 

@@ -75,7 +75,7 @@ const logout = async (id) => {
 
 const updateUserById = async (id, body) => {
   try {
-    return { data: User.findByIdAndUpdate(id, body, { new: true }) }
+    return { data: await User.findByIdAndUpdate(id, body, { new: true }) }
   } catch (error) {
     return { error }
   }

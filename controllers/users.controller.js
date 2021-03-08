@@ -17,7 +17,7 @@ const getCurrentUser = async (req, res) => {
 
   return createResponse(res, user, error, code)
 }
-
+// NOT sure that it is correct
 const updateUser = async (req, res) => {
   const userId = req.user._id
   const { body } = req

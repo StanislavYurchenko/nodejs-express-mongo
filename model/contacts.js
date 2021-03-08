@@ -4,7 +4,7 @@ const { SUBSCRIPTIONS_TYPE } = require('../utils/constants')
 const listContacts = async (userId, query) => {
   const { sortBy, sortByDesc, sub, select, limit = 5, page = 1 } = query
   try {
-    const { docs: contacts, totalDocs: total } =
+    const { docs: contacts, totalDocs: total, limit: newLimit, page: newPage } =
       await Contact
         .paginate(
           {
@@ -25,7 +25,7 @@ const listContacts = async (userId, query) => {
             }
           })
 
-    return { data: { contacts, total, limit, page } }
+    return { data: { contacts, total, limit: newLimit, page: newPage } }
   } catch (error) {
     return { error }
   }
@@ -47,10 +47,7 @@ const getContactById = async (contactId, userId) => {
 const addContact = async (body, userId) => {
   try {
     return {
-      data: await Contact.create({ ...body, owner: userId }).populate({
-        path: 'owner',
-        select: 'email -_id',
-      })
+      data: await Contact.create({ ...body, owner: userId })
     }
   } catch (error) {
     return { error }
@@ -60,10 +57,7 @@ const addContact = async (body, userId) => {
 const removeContact = async (contactId, userId) => {
   try {
     return {
-      data: await Contact.findOneAndDelete({ _id: contactId, owner: userId }).populate({
-        path: 'owner',
-        select: 'email -_id',
-      })
+      data: await Contact.findOneAndDelete({ _id: contactId, owner: userId })
     }
   } catch (error) {
     return { error }
@@ -73,10 +67,7 @@ const removeContact = async (contactId, userId) => {
 const updateContact = async (contactId, body, userId) => {
   try {
     return {
-      data: await Contact.findOneAndUpdate({ _id: contactId, owner: userId }, body, { new: true }).populate({
-        path: 'owner',
-        select: 'email -_id',
-      })
+      data: await Contact.findOneAndUpdate({ _id: contactId, owner: userId }, body, { new: true })
     }
   } catch (error) {
     return { error }

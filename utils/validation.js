@@ -102,7 +102,6 @@ const auth = (req, _res, next) => {
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     subscription: Joi.string().valid(...Object.values(SUBSCRIPTIONS_TYPE)).default(SUBSCRIPTIONS_TYPE.free),
-    token: Joi.string(),
   })
   const validationResult = schema.validate(body)
 
@@ -126,7 +125,6 @@ const newUser = (req, _res, next) => {
     email: Joi.string().email().required(),
     subscription: Joi.string().valid(...Object.values(SUBSCRIPTIONS_TYPE)).default(SUBSCRIPTIONS_TYPE.free),
     password: Joi.string().required(),
-    token: Joi.string().empty('').default(''),
   })
   const validationResult = schema.validate(body)
 

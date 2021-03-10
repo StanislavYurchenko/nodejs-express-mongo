@@ -18,17 +18,17 @@ const register = async (req, res) => {
     return createResponse(res, user, errorReg, code)
   }
 
-  const payload = { _id: user._id }
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '240h' })
+  // const payload = { _id: user._id }
+  // const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '240h' })
 
-  const { data } = await usersModel.updateToken(user._id, token)
+  // const { data } = await usersModel.updateToken(user._id, token)
 
-  const newUser = data
+  const newUser = user
     ? {
-        _id: data._id,
-        email: data.email,
-        subscription: data.subscription,
-        token
+        _id: user._id,
+        email: user.email,
+        subscription: user.subscription,
+        // token
       }
     : undefined
 
@@ -65,15 +65,9 @@ const logout = async (req, res) => {
   const userId = req.user.id
   const { data, error } = await usersModel.logout(userId)
 
-  const user = data
-    ? {
-        _id: data._id,
-        email: data.email,
-        subscription: data.subscription,
-      }
-    : undefined
+  const logoutResult = data && { data: { message: 'Logout success' } }
 
-  return createResponse(res, user, error)
+  return createResponse(res, logoutResult, error)
 }
 
 module.exports = {

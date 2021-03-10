@@ -18,17 +18,11 @@ const register = async (req, res) => {
     return createResponse(res, user, errorReg, code)
   }
 
-  // const payload = { _id: user._id }
-  // const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '240h' })
-
-  // const { data } = await usersModel.updateToken(user._id, token)
-
   const newUser = user
     ? {
         _id: user._id,
         email: user.email,
         subscription: user.subscription,
-        // token
       }
     : undefined
 

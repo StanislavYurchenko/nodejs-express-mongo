@@ -81,6 +81,15 @@ const updateUserById = async (id, body) => {
   }
 }
 
+const updateAvatar = async (id, avatar) => {
+  try {
+    const user = await User.findByIdAndUpdate(id, { avatar })
+    return { data: user }
+  } catch (error) {
+    return { error }
+  }
+}
+
 module.exports = {
   findUserByEmail,
   register,
@@ -89,4 +98,5 @@ module.exports = {
   updateToken,
   findUserById,
   updateUserById,
+  updateAvatar,
 }

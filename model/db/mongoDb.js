@@ -13,11 +13,14 @@ const options = {
 
 }
 
-const dbConnect = async () => {
+const dbConnect = async (callback) => {
   try {
     mongoose.connect(uri, options)
     const db = mongoose.connection
-    db.on('connected', () => console.log('<<< Connected to mongoDB >>>'))
+    db.on('connected', () => {
+      console.log('<<< Connected to mongoDB >>>')
+      return callback()
+    })
     db.on('disconnected', () => console.log('<<< Disconnected from mongoDB >>>'))
     db.on('error', console.error.bind(console, 'connection error:'))
 

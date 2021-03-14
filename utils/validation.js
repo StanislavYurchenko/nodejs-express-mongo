@@ -165,6 +165,21 @@ const updateUser = (req, _res, next) => {
   next()
 }
 
+const uploadImage = (req, res, next) => {
+  try {
+    if (!req.file) {
+      const error = new Error()
+      error.message = 'Field of avatar with file not found'
+      error.code = HTTP_CODE.BAD_CONTENT
+      throw error
+    }
+  } catch (error) {
+    next(error)
+  }
+
+  next()
+}
+
 module.exports = {
   newContact,
   updateContact,
@@ -172,5 +187,6 @@ module.exports = {
   auth,
   newUser,
   getContactsQuery,
-  updateUser
+  updateUser,
+  uploadImage,
 }

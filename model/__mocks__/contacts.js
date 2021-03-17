@@ -6,7 +6,7 @@ const listContacts = jest.fn((userId, query) => {
 })
 
 const getContactById = jest.fn((contactId, userId) => {
-  const contact = contacts.filter(contact => String(contact_id) === String(contactId))
+  const [contact] = contacts.filter(contact => String(contact._id) === String(contactId))
   return { data: contact }
 })
 
@@ -16,7 +16,7 @@ const addContact = jest.fn((body, userId) => {
 })
 
 const removeContact = jest.fn((contactId, userId) => {
-  const [contact] = contacts.filter(contact => String(contact_id) === String(contactId))
+  const [contact] = contacts.filter(contact => String(contact._id) === String(contactId))
   if (contact) {
    contact = {...contact, ...body}
   }

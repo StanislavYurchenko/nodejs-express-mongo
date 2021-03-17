@@ -1,8 +1,7 @@
 const bcrypt = require('bcryptjs')
-const jest = require('jest')
 const { users } = require('./data')
+const { SALT_FACTOR } = require('../../utils/constants')
 
-console.log("we are here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 const findUserByEmail = jest.fn((email) => {
   const [user] = users.filter((user) => String(user.email) === String(email))
@@ -16,61 +15,30 @@ const findUserById = jest.fn((id) => {
 })
 
 const updateToken = jest.fn((id, token) => {
-  // try {
-  //   return { data: await User.findByIdAndUpdate(id, { token }) }
-  // } catch (error) {
-  //   return { error }
-  // }
+    return {}
 })
 
-const register = jest.fn((body) => {
-  return {}
-  // const { email } = body
-  // try {
-  //   const { data } = await findUserByEmail(email)
-  //   const isUserExist = Boolean(data)
-  //   if (isUserExist) {
-  //     const error = new Error()
-  //     error.code = HTTP_CODE.CONFLICT
-  //     error.message = `Email ${body.email} is already exist`
-  //     throw error
-  //   }
-
-  //   const user = new User(body)
-  //   return { data: await user.save() }
-  // } catch (error) {
-  //   return { error }
-  // }
+const register = jest.fn(({name, email, password}) => {
+  const pass = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_FACTOR), null)
+  const newUser = {
+    name,
+    email,
+    password: pass,
+    _id: '60513a347039433f64247981',
+    validPassword: function (pass) {
+      return bcrypt.compareSync(pass, this.password)
+    },
+  }
+  users.push(newUser)
+  return { data: newUser }
 })
 
 const login = jest.fn((body) => {
   return {}
-  // const { email, password } = body
-  // try {
-  //   const { data } = await findUserByEmail(email)
-  //   const isValidPassword = data ? await data.validPassword(password) : false
-
-  //   if (!data || !isValidPassword) {
-  //     const error = new Error()
-  //     error.code = HTTP_CODE.NOT_FOUND
-  //     error.message = 'User or password is incorrect'
-  //     throw error
-  //   }
-  //   return { data }
-  // } catch (error) {
-  //   return { error }
-  // }
 })
 
 const logout = jest.fn((id) => {
   return {}
-  // try {
-  //   const user = await User.findById(id)
-  //   await updateToken(id, null)
-  //   return { data: user }
-  // } catch (error) {
-  //   return { error }
-  // }
 })
 
 const updateUserById = jest.fn((id, body) => {

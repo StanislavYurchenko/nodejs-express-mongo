@@ -2,25 +2,25 @@ const contacts = [
   {
     name: "Pitter Pen 1",
     email: "piter_pen1@mail.com",
-    _id: "60469b1f318c1b3c906f9ffc",
+    _id: "605259cf2ab5d626e0a7413f",
     phone: "12345678",
-    subscription: "pro",
-    password: "$2a$08$XQ7rSQAXqPd0EAncoYcx8.P.Rps6CWdbq62Prx4CAA07oS8eIWI0u",
+    subscription: "free",
+    password: "$2a$08$b8vpRVmjANuMgHfyNxth.epZeNhkCMS0hSLXx2g6Lwc4st303.OxO",
     owner: {
-        "email": "user04@mail.com"
+        "email": "user-for-test@mail.com"
     },
-    createdAt: "2021-03-08T21:46:56.053Z",
-    updatedAt: "2021-03-08T21:46:56.053Z",
+    createdAt: "2021-03-17T19:34:39.670Z",
+    updatedAt: "2021-03-17T19:34:39.670Z",
   },
   {
     name: "Pitter Pen 2",
     email: "piter_pen2@mail.com",
-    _id: "60469b1f318c1b3c906f9ffd",
+    _id: "605259e02ab5d626e0a74140",
     phone: "12345678",
-    subscription: "pro",
-    password: "$2a$08$dQ4esm6yKRsQgTY6Tr16puzpO5V47n.UyVqP6bTyFwlO.jrDK2XsK",
+    subscription: "free",
+    password: "$2a$08$VQTnU4ph7y2VfhsUrEoe7uSnpKEvwF10VHVFwUMAv0tEotY3tHEOi",
     owner: {
-        "email": "user04@mail.com",
+        "email": "user-for-test@mail.com",
     },
     createdAt: "2021-03-08T21:46:56.053Z",
     updatedAt: "2021-03-08T21:46:56.053Z",
@@ -31,7 +31,7 @@ const newContact = {
   name: "test Name",
   email: "name@mail.com",
   phone: "099 999 99 99",
-  password: "password",
+  password: "12345678",
 }
 
 const User = {  

@@ -5,7 +5,6 @@ const guard = require('../../utils/guard')
 
 const router = express.Router()
 
-// router.get('/', guard, validate.getContactsQuery, controller.getContacts)
 router.get('/', guard, validate.getContactsQuery, controller.getContacts)
 
 router.get('/:id', guard, validate.id, controller.getContactById)

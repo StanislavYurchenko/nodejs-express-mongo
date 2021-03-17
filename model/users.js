@@ -12,7 +12,8 @@ const findUserByEmail = async (email) => {
 
 const findUserById = async (id) => {
   try {
-    return { data: await User.findById(id) }
+    const user = await User.findById(id)
+    return { data: user }
   } catch (error) {
     return { error }
   }

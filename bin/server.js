@@ -1,6 +1,6 @@
 const app = require('../app')
 
-const dbConnect = require('../model/db/mongoDb')
+const dbConnect = require('../model/mongoDb')
 const { createDirIfIsNotExist } = require('../utils/createDir')
 const { DIRS } = require('../utils/constants')
 

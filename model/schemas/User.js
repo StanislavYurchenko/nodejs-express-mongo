@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 
 const { Schema } = mongoose
 const { SUBSCRIPTIONS_TYPE, SALT_FACTOR } = require('../../utils/constants')
@@ -29,7 +30,13 @@ const usersSchema = new Schema({
   token: {
     type: String,
     default: null
-  }
+  },
+  avatar: {
+    type: String,
+    default: function () {
+      return gravatar.profile_url(this.email, { s: 250 }, true)
+    }
+  },
 }, { versionKey: false, timestamps: true })
 
 usersSchema.pre('save', async function (next) {

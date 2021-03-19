@@ -4,7 +4,7 @@ const { HTTP_CODE } = require('./constants')
 
 const guard = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
-    const [, token] = req.get('Authorization').split(' ')
+    const [, token] = req.get('Authorization')?.split(' ')
     try {
       if (!user || err || token !== user.token) {
         const error = new Error()

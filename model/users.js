@@ -12,7 +12,8 @@ const findUserByEmail = async (email) => {
 
 const findUserById = async (id) => {
   try {
-    return { data: await User.findById(id) }
+    const user = await User.findById(id)
+    return { data: user }
   } catch (error) {
     return { error }
   }
@@ -81,6 +82,15 @@ const updateUserById = async (id, body) => {
   }
 }
 
+const updateAvatar = async (id, avatar) => {
+  try {
+    const user = await User.findByIdAndUpdate(id, { avatar })
+    return { data: user }
+  } catch (error) {
+    return { error }
+  }
+}
+
 module.exports = {
   findUserByEmail,
   register,
@@ -89,4 +99,5 @@ module.exports = {
   updateToken,
   findUserById,
   updateUserById,
+  updateAvatar,
 }

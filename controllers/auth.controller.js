@@ -30,10 +30,10 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
+  console.log('login');
   const { body } = req
   const { data, error } = await usersModel.login(body)
   const code = data ? HTTP_CODE.OK : HTTP_CODE.NOT_FOUND
-
   if (error) {
     return createResponse(res, data, error, code)
   }
@@ -64,8 +64,30 @@ const logout = async (req, res) => {
   return createResponse(res, logoutResult, error)
 }
 
+const verify = async (req, res, next) => {
+  try {
+    const { data, error } = await usersModel.findByVerifyToken(req.params.token)
+    if (data) {
+      await usersModel.updateVerifyToken(data._id, true, null)
+
+      const result = { message: 'Verification successful' } 
+      const code = HTTP_CODE.OK
+
+      return createResponse(res, result, error, code)
+    } 
+
+    const result = { message: 'Link is not valid' } 
+    const code = HTTP_CODE.NOT_FOUND
+
+    return createResponse(res, result, error, code)
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   register,
   login,
   logout,
+  verify,
 }

@@ -11,4 +11,6 @@ router.post('/login', validate.auth, controller.login)
 
 router.post('/logout', guard, controller.logout)
 
+router.get('/verify/:token', controller.verify)
+
 module.exports = router

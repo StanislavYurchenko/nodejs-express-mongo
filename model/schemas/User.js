@@ -4,6 +4,7 @@ const gravatar = require('gravatar')
 
 const { Schema } = mongoose
 const { SUBSCRIPTIONS_TYPE, SALT_FACTOR } = require('../../utils/constants')
+const { boolean } = require('joi')
 
 const usersSchema = new Schema({
   email: {
@@ -36,6 +37,14 @@ const usersSchema = new Schema({
     default: function () {
       return gravatar.profile_url(this.email, { s: 250 }, true)
     }
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    require: [true, 'Verify token is require']
   },
 }, { versionKey: false, timestamps: true })
 

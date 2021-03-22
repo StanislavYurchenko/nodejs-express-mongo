@@ -77,13 +77,12 @@ class EmailService {
       },
     })
 
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
       from: EMAIL_SERVICE_LOGIN, 
       to: email, 
       subject: "Ferify your email ✔", 
       html: emailBody, 
     })
-
  }
 }
 

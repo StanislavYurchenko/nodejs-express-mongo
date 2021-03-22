@@ -1,6 +1,5 @@
 const request = require('supertest')
 const jwt = require('jsonwebtoken')
-const fs = require('fs/promises')
 const dotenv = require('dotenv')
 
 const { User, newUser } = require('../model/__mocks__/data')
@@ -17,7 +16,7 @@ jest.mock('../model/users.js')
 
 
 describe('Testing the route auth', () => {
-  it('should return 201 registration', async (done) => {
+  it('should return 201 registration', async () => {
     const res = await request(app)
       .post(`/auth/register`)
       .send(newUser)
@@ -25,15 +24,12 @@ describe('Testing the route auth', () => {
 
     expect(res.status).toEqual(201)
     expect(res.body).toBeDefined()
-
-    done()
   })
 
- 
 
   // TODO
-  // it('should return 409 registration -  email already used', async (done) => { })
-  // it('should return 200 login', async (done) => {})
-  // it('should return 401 login', async (done) => {})
-  // it('should return 200 upload avatar', async (done) => {})
+  // it('should return 409 registration -  email already used', async () => {})
+  // it('should return 200 login', async () => {})
+  // it('should return 401 login', async () => {})
+  // it('should return 200 upload avatar', async () => {})
 })

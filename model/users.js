@@ -60,7 +60,7 @@ const login = async (body) => {
     if (!data || !isValidPassword || !data.verify) {
       const error = new Error()
       error.code = HTTP_CODE.NOT_FOUND
-      error.message = user.verify ? 'User or password is incorrect' : 'Verify your email'
+      error.message = data.verify ? 'User or password is incorrect' : 'Verify your email'
       throw error
     }
     return { data }

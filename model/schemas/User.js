@@ -4,7 +4,6 @@ const gravatar = require('gravatar')
 
 const { Schema } = mongoose
 const { SUBSCRIPTIONS_TYPE, SALT_FACTOR } = require('../../utils/constants')
-const { boolean } = require('joi')
 
 const usersSchema = new Schema({
   email: {

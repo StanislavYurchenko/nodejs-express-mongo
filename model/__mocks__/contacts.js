@@ -16,18 +16,19 @@ const addContact = jest.fn((body, userId) => {
 })
 
 const removeContact = jest.fn((contactId, userId) => {
-  const [contact] = contacts.filter(contact => String(contact._id) === String(contactId))
-  if (contact) {
-   contact = {...contact, ...body}
-  }
-  return { data :contact }
+  const index = contacts.findIndex(contact => String(contact._id) === String(contactId))
+  if (index === -1) return null
+  const [contact] = contacts.splice(index, 1)
+  return { data: contact }
+
 
 })
 
 const updateContact = jest.fn((contactId, body, userId) => {
-  const index = contacts.findIndex(contact => String(contact_id) === String(contactId))
-  if (index === -1) return null
-  const [contact] = contacts.splice(index, 1)
+  let [contact] = contacts.filter(contact => String(contact._id) === String(contactId))
+  if (contact) {
+    contact = { ...contact, ...body }
+  }
   return { data: contact }
 })
 

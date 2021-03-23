@@ -37,6 +37,14 @@ const usersSchema = new Schema({
       return gravatar.profile_url(this.email, { s: 250 }, true)
     }
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    require: [true, 'Verify token is require']
+  },
 }, { versionKey: false, timestamps: true })
 
 usersSchema.pre('save', async function (next) {
